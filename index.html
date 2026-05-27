@@ -7,13 +7,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
 
-<!-- Firebase -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
   import { getFirestore, doc, setDoc, getDoc, onSnapshot, collection,
     updateDoc, serverTimestamp, query, where, getDocs }
     from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
   const app = initializeApp({
     apiKey: "AIzaSyCNH4oSr4CeqMXA3atmw71I2hFQO1SvDG0",
     authDomain: "intellectaquiz.firebaseapp.com",
@@ -27,68 +25,38 @@
     updateDoc, serverTimestamp, query, where, getDocs };
   window.dispatchEvent(new Event('iq-ready'));
 </script>
-
-<!-- jsPDF -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <style>
-/* ═══════════════════════ DESIGN SYSTEM ═══════════════════════ */
-:root {
-  --navy:   #0b1524;
-  --navy2:  #131f31;
-  --navy3:  #1a2a40;
-  --violet: #7c5ce8;
-  --violet2:#9d82f5;
-  --sky:    #34d1f5;
-  --sky2:   #7ee8fa;
-  --white:  #eef3ff;
-  --muted:  #7a96b8;
-  --green:  #1ed9a0;
-  --yellow: #f9c846;
-  --red:    #f4706b;
-  --border: rgba(124,92,232,.2);
-  --card:   rgba(19,31,49,.9);
-  --shadow: 0 12px 48px rgba(0,0,0,.55);
-  --r:      16px;
-  --fh:     'Syne', sans-serif;
-  --fb:     'DM Sans', sans-serif;
+:root{
+  --navy:#0b1524;--navy2:#131f31;--navy3:#1a2a40;
+  --violet:#7c5ce8;--violet2:#9d82f5;
+  --sky:#34d1f5;--sky2:#7ee8fa;
+  --white:#eef3ff;--muted:#7a96b8;
+  --green:#1ed9a0;--yellow:#f9c846;--red:#f4706b;
+  --border:rgba(124,92,232,.2);--card:rgba(19,31,49,.92);
+  --shadow:0 12px 48px rgba(0,0,0,.55);--r:16px;
+  --fh:'Syne',sans-serif;--fb:'DM Sans',sans-serif;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;-webkit-tap-highlight-color:transparent}
-body{
-  font-family:var(--fb);background:var(--navy);color:var(--white);
-  min-height:100vh;overflow-x:hidden;
-}
+html{-webkit-tap-highlight-color:transparent}
+body{font-family:var(--fb);background:var(--navy);color:var(--white);min-height:100vh;overflow-x:hidden}
 body::before{
   content:'';position:fixed;inset:0;z-index:-1;
   background:
-    radial-gradient(ellipse 70% 55% at 15% 5%, rgba(124,92,232,.2) 0%,transparent 65%),
-    radial-gradient(ellipse 55% 45% at 85% 85%, rgba(52,209,245,.12) 0%,transparent 60%),
+    radial-gradient(ellipse 70% 55% at 15% 5%,rgba(124,92,232,.2) 0%,transparent 65%),
+    radial-gradient(ellipse 55% 45% at 85% 85%,rgba(52,209,245,.12) 0%,transparent 60%),
     var(--navy);
 }
-
-/* ── type ── */
 h1,h2,h3,h4{font-family:var(--fh);font-weight:700;line-height:1.15}
-
-/* ── utils ── */
 .hidden{display:none!important}
 .w-full{width:100%}
 .text-center{text-align:center}
 .text-muted{color:var(--muted);font-size:.85rem}
-.text-green{color:var(--green)}
-.text-red{color:var(--red)}
-.text-sky{color:var(--sky)}
-.text-yellow{color:var(--yellow)}
-.flex{display:flex}
-.col{flex-direction:column}
-.items-center{align-items:center}
-.justify-between{justify-content:space-between}
-.gap-2{gap:.5rem}.gap-3{gap:.75rem}.gap-4{gap:1rem}
-.mt-1{margin-top:.25rem}.mt-2{margin-top:.5rem}
-.mt-3{margin-top:.75rem}.mt-4{margin-top:1rem}
-.mt-5{margin-top:1.25rem}.mt-6{margin-top:1.5rem}
-
-/* ── scrollbar ── */
+.text-green{color:var(--green)}.text-red{color:var(--red)}
+.text-sky{color:var(--sky)}.text-yellow{color:var(--yellow)}
+.mt-1{margin-top:.25rem}.mt-2{margin-top:.5rem}.mt-3{margin-top:.75rem}
+.mt-4{margin-top:1rem}.mt-5{margin-top:1.25rem}.mt-6{margin-top:1.5rem}
 ::-webkit-scrollbar{width:5px}
 ::-webkit-scrollbar-track{background:var(--navy2)}
 ::-webkit-scrollbar-thumb{background:var(--violet);border-radius:3px}
@@ -101,46 +69,24 @@ h1,h2,h3,h4{font-family:var(--fh);font-weight:700;line-height:1.15}
   transition:all .18s;white-space:nowrap;
 }
 .btn:active{transform:scale(.96)}
-.btn-primary{
-  background:linear-gradient(135deg,var(--violet),var(--violet2));
-  color:#fff;box-shadow:0 4px 22px rgba(124,92,232,.45);
-}
-.btn-primary:hover{filter:brightness(1.1);box-shadow:0 6px 28px rgba(124,92,232,.6)}
-.btn-sky{
-  background:linear-gradient(135deg,var(--sky),#60c8ff);
-  color:var(--navy);box-shadow:0 4px 18px rgba(52,209,245,.3);
-}
-.btn-sky:hover{filter:brightness(1.08)}
-.btn-green{
-  background:linear-gradient(135deg,var(--green),#34d399);
-  color:var(--navy);box-shadow:0 4px 18px rgba(30,217,160,.3);
-}
-.btn-green:hover{filter:brightness(1.08)}
-.btn-outline{
-  background:transparent;color:var(--muted);
-  border:1.5px solid var(--border);
-}
-.btn-outline:hover{border-color:var(--violet2);color:var(--violet2)}
-.btn-ghost{
-  background:rgba(124,92,232,.1);color:var(--violet2);
-  border:1px solid rgba(124,92,232,.22);
-}
-.btn-ghost:hover{background:rgba(124,92,232,.2)}
-.btn-danger{
-  background:rgba(244,112,107,.12);color:var(--red);
-  border:1px solid rgba(244,112,107,.25);
-}
-.btn-danger:hover{background:rgba(244,112,107,.22)}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.btn-primary{background:linear-gradient(135deg,var(--violet),var(--violet2));color:#fff;box-shadow:0 4px 22px rgba(124,92,232,.45)}
+.btn-primary:hover:not(:disabled){filter:brightness(1.1)}
+.btn-sky{background:linear-gradient(135deg,var(--sky),#60c8ff);color:var(--navy)}
+.btn-sky:hover:not(:disabled){filter:brightness(1.08)}
+.btn-green{background:linear-gradient(135deg,var(--green),#34d399);color:var(--navy)}
+.btn-green:hover:not(:disabled){filter:brightness(1.08)}
+.btn-outline{background:transparent;color:var(--muted);border:1.5px solid var(--border)}
+.btn-outline:hover:not(:disabled){border-color:var(--violet2);color:var(--violet2)}
+.btn-ghost{background:rgba(124,92,232,.1);color:var(--violet2);border:1px solid rgba(124,92,232,.22)}
+.btn-ghost:hover:not(:disabled){background:rgba(124,92,232,.2)}
+.btn-danger{background:rgba(244,112,107,.12);color:var(--red);border:1px solid rgba(244,112,107,.25)}
+.btn-danger:hover:not(:disabled){background:rgba(244,112,107,.22)}
 .btn-sm{padding:.4rem 1rem;font-size:.8rem;border-radius:9px}
 .btn-lg{padding:.9rem 2rem;font-size:1.05rem;border-radius:14px}
 
-/* ── cards ── */
-.card{
-  background:var(--card);border:1px solid var(--border);
-  border-radius:var(--r);backdrop-filter:blur(14px);
-  padding:1.5rem;box-shadow:var(--shadow);
-}
-.card-sm{padding:1rem;border-radius:11px}
+/* ── card ── */
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);backdrop-filter:blur(14px);padding:1.5rem;box-shadow:var(--shadow)}
 
 /* ── inputs ── */
 .field{display:flex;flex-direction:column;gap:.4rem}
@@ -151,18 +97,31 @@ h1,h2,h3,h4{font-family:var(--fh);font-weight:700;line-height:1.15}
   font-family:var(--fb);font-size:.95rem;transition:border .2s,box-shadow .2s;
   outline:none;width:100%;
 }
-.input:focus,.select:focus{
-  border-color:var(--violet2);
-  box-shadow:0 0 0 3px rgba(124,92,232,.18);
-}
+.input:focus,.select:focus{border-color:var(--violet2);box-shadow:0 0 0 3px rgba(124,92,232,.18)}
 .select option{background:var(--navy2);color:var(--white)}
 
-/* ── badge ── */
-.badge{
-  display:inline-flex;align-items:center;gap:.3rem;
-  padding:.22rem .72rem;border-radius:999px;
-  font-size:.75rem;font-weight:600;letter-spacing:.03em;
+/* ── PIN ── */
+.pin-row{display:flex;gap:.5rem;justify-content:center;margin:.25rem 0}
+.pin-digit{
+  width:54px;height:62px;border-radius:12px;text-align:center;
+  font-size:1.7rem;font-family:var(--fh);font-weight:700;
+  caret-color:var(--violet2);background:rgba(255,255,255,.06);
+  border:2px solid var(--border);color:var(--white);outline:none;
+  transition:border .2s,box-shadow .2s;
 }
+.pin-digit:focus{border-color:var(--violet2);box-shadow:0 0 0 3px rgba(124,92,232,.18)}
+
+/* ── toggle tabs ── */
+.tab-wrap{display:flex;background:rgba(255,255,255,.05);border-radius:12px;padding:3px;margin-bottom:1.5rem}
+.tab-btn{
+  flex:1;padding:.55rem;border-radius:9px;font-family:var(--fh);font-size:.85rem;
+  font-weight:700;cursor:pointer;transition:all .18s;border:none;
+  background:transparent;color:var(--muted);
+}
+.tab-btn.active{background:var(--violet);color:#fff;box-shadow:0 3px 12px rgba(124,92,232,.4)}
+
+/* ── badge ── */
+.badge{display:inline-flex;align-items:center;gap:.3rem;padding:.22rem .72rem;border-radius:999px;font-size:.75rem;font-weight:600}
 .badge-green {background:rgba(30,217,160,.15);color:var(--green);border:1px solid rgba(30,217,160,.3)}
 .badge-yellow{background:rgba(249,200,70,.15);color:var(--yellow);border:1px solid rgba(249,200,70,.3)}
 .badge-violet{background:rgba(124,92,232,.2);color:var(--violet2);border:1px solid rgba(124,92,232,.3)}
@@ -170,136 +129,62 @@ h1,h2,h3,h4{font-family:var(--fh);font-weight:700;line-height:1.15}
 .badge-red   {background:rgba(244,112,107,.15);color:var(--red);border:1px solid rgba(244,112,107,.3)}
 
 /* ── pulse ── */
-.pulse{width:8px;height:8px;border-radius:50%;background:var(--green);
-  box-shadow:0 0 0 0 rgba(30,217,160,.5);animation:pulse 1.8s infinite}
-@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(30,217,160,.6)}70%{box-shadow:0 0 0 7px rgba(30,217,160,0)}100%{box-shadow:0 0 0 0 rgba(30,217,160,0)}}
+.pulse{width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulseA 1.8s infinite}
+@keyframes pulseA{0%{box-shadow:0 0 0 0 rgba(30,217,160,.6)}70%{box-shadow:0 0 0 7px rgba(30,217,160,0)}100%{box-shadow:0 0 0 0 rgba(30,217,160,0)}}
 
 /* ── progress ── */
 .prog-wrap{background:rgba(255,255,255,.06);border-radius:999px;overflow:hidden;height:6px}
-.prog-bar{height:100%;border-radius:999px;transition:width .5s ease;
-  background:linear-gradient(90deg,var(--violet),var(--sky))}
+.prog-bar{height:100%;border-radius:999px;transition:width .5s ease;background:linear-gradient(90deg,var(--violet),var(--sky))}
 
 /* ── toast ── */
-#toast{position:fixed;bottom:1.25rem;left:50%;transform:translateX(-50%);
-  z-index:9999;display:flex;flex-direction:column;gap:.4rem;align-items:center;pointer-events:none}
-.toast-item{
-  background:var(--navy3);border:1px solid var(--border);border-radius:10px;
-  padding:.65rem 1.1rem;font-size:.85rem;font-weight:500;
-  box-shadow:0 6px 24px rgba(0,0,0,.4);animation:tIn .28s ease;
-  display:flex;align-items:center;gap:.45rem;white-space:nowrap;pointer-events:auto;
-}
+#toast-cont{position:fixed;bottom:5rem;left:50%;transform:translateX(-50%);z-index:9999;display:flex;flex-direction:column;gap:.4rem;align-items:center;pointer-events:none}
+.toast-item{background:var(--navy3);border:1px solid var(--border);border-radius:10px;padding:.65rem 1.1rem;font-size:.85rem;font-weight:500;box-shadow:0 6px 24px rgba(0,0,0,.4);animation:tIn .28s ease;display:flex;align-items:center;gap:.45rem;white-space:nowrap}
 @keyframes tIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 @keyframes tOut{to{opacity:0;transform:translateY(10px)}}
 
-/* ── modal ── */
-.overlay{
-  position:fixed;inset:0;z-index:800;background:rgba(11,21,36,.82);
-  backdrop-filter:blur(7px);display:flex;align-items:center;
-  justify-content:center;padding:1rem;animation:fadeIn .2s ease;
-}
+/* ── overlay/modal ── */
+.overlay{position:fixed;inset:0;z-index:800;background:rgba(11,21,36,.85);backdrop-filter:blur(7px);display:flex;align-items:center;justify-content:center;padding:1rem;animation:fadeIn .2s ease}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
-.modal{
-  background:var(--navy2);border:1px solid var(--border);border-radius:20px;
-  padding:1.75rem;width:100%;max-width:500px;
-  box-shadow:0 24px 64px rgba(0,0,0,.55);animation:slideUp .25s ease;
-}
+.modal{background:var(--navy2);border:1px solid var(--border);border-radius:20px;padding:1.75rem;width:100%;max-width:480px;box-shadow:0 24px 64px rgba(0,0,0,.55);animation:slideUp .25s ease;max-height:88vh;overflow-y:auto}
 @keyframes slideUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
 
-/* ══════════════ SCREENS ══════════════ */
-.screen{display:none;min-height:100vh}
+/* ══ SCREENS ══ */
+.screen{display:none;min-height:100vh;min-height:100dvh}
 .screen.active{display:flex;flex-direction:column}
+.screen-center{align-items:center;justify-content:center;padding:1.5rem 1rem}
 
-/* ── LANDING / HOME ── */
-#s-home{align-items:center;justify-content:center;padding:1.5rem;text-align:center}
-.logo{
-  font-family:var(--fh);font-size:clamp(2.2rem,7vw,3.5rem);font-weight:800;
-  letter-spacing:-.02em;line-height:1;
-  background:linear-gradient(135deg,var(--sky),var(--violet2),var(--sky2));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-}
-.tagline{color:var(--muted);font-size:1rem;margin:.6rem 0 2rem}
+/* ── LOGO ── */
+.logo{font-family:var(--fh);font-size:clamp(1.9rem,6vw,3rem);font-weight:800;letter-spacing:-.02em;line-height:1;background:linear-gradient(135deg,var(--sky),var(--violet2),var(--sky2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 
-/* ── REGISTER ── */
-#s-register{align-items:center;justify-content:center;padding:1.5rem}
-#s-register .card{width:100%;max-width:420px}
+/* ── AVATAR ── */
+.avatar-big{width:68px;height:68px;border-radius:50%;margin:0 auto .75rem;background:linear-gradient(135deg,var(--violet),var(--sky));display:flex;align-items:center;justify-content:center;font-family:var(--fh);font-weight:800;font-size:1.5rem;color:#fff;box-shadow:0 8px 28px rgba(124,92,232,.4)}
 
-/* ── WHO AM I (sesión guardada) ── */
-#s-whoami{align-items:center;justify-content:center;padding:1.5rem}
-#s-whoami .card{width:100%;max-width:400px;text-align:center}
-.avatar-big{
-  width:72px;height:72px;border-radius:50%;margin:0 auto .75rem;
-  background:linear-gradient(135deg,var(--violet),var(--sky));
-  display:flex;align-items:center;justify-content:center;
-  font-family:var(--fh);font-weight:800;font-size:1.6rem;color:#fff;
-  box-shadow:0 8px 28px rgba(124,92,232,.4);
-}
-
-/* ── WAITING ── */
-#s-waiting{align-items:center;justify-content:center;padding:1.5rem;text-align:center}
-#s-waiting .card{width:100%;max-width:400px}
-.spin{
-  width:64px;height:64px;border-radius:50%;
-  border:3px solid rgba(124,92,232,.15);border-top-color:var(--violet2);
-  animation:spin 1s linear infinite;margin:0 auto 1.25rem;
-}
+/* ── SPIN ── */
+.spin{width:60px;height:60px;border-radius:50%;border:3px solid rgba(124,92,232,.15);border-top-color:var(--violet2);animation:spin 1s linear infinite;margin:0 auto 1.25rem}
 @keyframes spin{to{transform:rotate(360deg)}}
 
 /* ── QUIZ ── */
 #s-quiz{flex-direction:column}
-.quiz-top{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:.85rem 1.15rem;
-  background:rgba(11,21,36,.92);backdrop-filter:blur(12px);
-  border-bottom:1px solid var(--border);position:sticky;top:0;z-index:50;gap:1rem;
-}
-.ql-brand{font-family:var(--fh);font-size:1rem;font-weight:800;
-  background:linear-gradient(135deg,var(--sky),var(--violet2));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.timer-num{
-  font-family:var(--fh);font-size:1.3rem;font-weight:700;color:var(--sky);
-  min-width:50px;text-align:center;
-}
+.quiz-top{display:flex;align-items:center;justify-content:space-between;padding:.85rem 1.15rem;background:rgba(11,21,36,.94);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:50;gap:.75rem;flex-shrink:0}
+.ql-brand{font-family:var(--fh);font-size:1rem;font-weight:800;background:linear-gradient(135deg,var(--sky),var(--violet2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.timer-num{font-family:var(--fh);font-size:1.25rem;font-weight:700;color:var(--sky);min-width:50px;text-align:center}
 .timer-num.urgent{color:var(--red);animation:blink .55s infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
-
-.quiz-body{flex:1;padding:1.4rem 1rem 5rem;max-width:660px;margin:0 auto;width:100%}
-.q-num-lbl{font-size:.75rem;color:var(--violet2);font-weight:700;text-transform:uppercase;
-  letter-spacing:.08em;margin-bottom:.4rem}
-.q-text{font-family:var(--fh);font-size:clamp(1rem,2.8vw,1.3rem);font-weight:700;
-  line-height:1.45;margin-bottom:1.4rem}
-.choices{display:grid;gap:.65rem}
-.choice{
-  background:rgba(255,255,255,.03);border:2px solid var(--border);border-radius:13px;
-  padding:.95rem 1.1rem;text-align:left;cursor:pointer;
-  transition:all .16s;color:var(--white);font-family:var(--fb);font-size:.93rem;font-weight:500;
-  display:flex;align-items:center;gap:.8rem;
-}
+.quiz-scroll{flex:1;overflow-y:auto;padding:1.4rem 1rem 1rem;max-width:660px;margin:0 auto;width:100%}
+.q-num-lbl{font-size:.75rem;color:var(--violet2);font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.4rem}
+.q-text{font-family:var(--fh);font-size:clamp(1rem,2.8vw,1.25rem);font-weight:700;line-height:1.45;margin-bottom:1.25rem}
+.choices{display:grid;gap:.6rem}
+.choice{background:rgba(255,255,255,.03);border:2px solid var(--border);border-radius:13px;padding:.9rem 1rem;text-align:left;cursor:pointer;transition:all .16s;color:var(--white);font-family:var(--fb);font-size:.92rem;font-weight:500;display:flex;align-items:center;gap:.75rem}
 .choice:hover:not(:disabled){border-color:var(--violet2);background:rgba(124,92,232,.1);transform:translateX(3px)}
-.choice.sel {border-color:var(--violet);background:rgba(124,92,232,.18)}
-.choice.ok  {border-color:var(--green);background:rgba(30,217,160,.14)}
-.choice.bad {border-color:var(--red);background:rgba(244,112,107,.1)}
+.choice.sel{border-color:var(--violet);background:rgba(124,92,232,.18)}
 .choice:disabled{cursor:default}
-.ch-letter{
-  width:32px;height:32px;border-radius:8px;font-family:var(--fh);font-weight:700;
-  display:flex;align-items:center;justify-content:center;
-  background:rgba(255,255,255,.07);font-size:.85rem;flex-shrink:0;
-}
-.quiz-nav{
-  display:flex;gap:.65rem;justify-content:flex-end;margin-top:1.25rem;flex-wrap:wrap;
-}
-
-/* ── QUIZ DONE (waiting results) ── */
-#quiz-done{text-align:center;padding:2.5rem 0}
+.ch-letter{width:32px;height:32px;border-radius:8px;font-family:var(--fh);font-weight:700;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.07);font-size:.85rem;flex-shrink:0}
+.quiz-nav{display:flex;gap:.6rem;justify-content:flex-end;margin-top:1.1rem;flex-wrap:wrap}
 
 /* ── RESULTS ── */
-#s-results{align-items:center;justify-content:center;padding:1.5rem}
-#s-results .card{width:100%;max-width:480px}
-.ring-wrap{
-  --p:0%;width:120px;height:120px;border-radius:50%;
-  background:conic-gradient(var(--violet2) var(--p),rgba(255,255,255,.06) 0);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  margin:0 auto 1.25rem;position:relative;
-}
+#s-results{flex-direction:column}
+.page-scroll{flex:1;overflow-y:auto;padding:1.25rem 1rem 6rem;max-width:480px;margin:0 auto;width:100%}
+.ring-wrap{--p:0%;width:120px;height:120px;border-radius:50%;background:conic-gradient(var(--violet2) var(--p),rgba(255,255,255,.06) 0);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 1.25rem;position:relative}
 .ring-wrap::before{content:'';position:absolute;inset:11px;border-radius:50%;background:var(--navy2)}
 .ring-pct{position:relative;z-index:1;font-family:var(--fh);font-size:1.85rem;font-weight:800;color:var(--violet2)}
 .ring-lbl{position:relative;z-index:1;font-size:.68rem;color:var(--muted)}
@@ -309,130 +194,134 @@ h1,h2,h3,h4{font-family:var(--fh);font-weight:700;line-height:1.15}
 .stat-lbl{font-size:.7rem;color:var(--muted);margin-top:.1rem}
 
 /* ── HISTORY ── */
-#s-history{flex-direction:column;padding:1.25rem}
-.hist-header{
-  display:flex;align-items:center;justify-content:space-between;
-  margin-bottom:1.25rem;flex-wrap:wrap;gap:.5rem;
-}
+#s-history{flex-direction:column}
+.page-header{display:flex;align-items:center;justify-content:space-between;padding:1rem 1rem .25rem;flex-shrink:0}
 .hist-list{display:flex;flex-direction:column;gap:.75rem}
-.hist-card{
-  background:var(--card);border:1px solid var(--border);border-radius:13px;
-  padding:1rem;display:flex;align-items:center;gap:.85rem;
-  transition:border-color .18s;cursor:pointer;
-}
+.hist-card{background:var(--card);border:1px solid var(--border);border-radius:13px;padding:1rem;display:flex;align-items:center;gap:.85rem;transition:border-color .18s;cursor:pointer}
 .hist-card:hover{border-color:rgba(124,92,232,.4)}
-.hist-score{
-  width:52px;height:52px;border-radius:12px;flex-shrink:0;
-  display:flex;align-items:center;justify-content:center;
-  font-family:var(--fh);font-weight:800;font-size:1.1rem;
-}
+.hist-score{width:52px;height:52px;border-radius:12px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:var(--fh);font-weight:800;font-size:1.1rem}
 .hist-info{flex:1;min-width:0}
 .hist-title{font-weight:600;font-size:.9rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .hist-meta{font-size:.75rem;color:var(--muted);margin-top:.2rem}
 
-/* ── NAV BAR (bottom) ── */
-#nav-bar{
-  position:fixed;bottom:0;left:0;right:0;z-index:100;
-  background:rgba(11,21,36,.95);backdrop-filter:blur(14px);
-  border-top:1px solid var(--border);
-  display:flex;justify-content:space-around;align-items:center;
-  padding:.55rem 0 calc(.55rem + env(safe-area-inset-bottom));
-}
-.nav-btn{
-  display:flex;flex-direction:column;align-items:center;gap:.2rem;
-  font-family:var(--fh);font-size:.68rem;font-weight:600;color:var(--muted);
-  background:none;border:none;cursor:pointer;padding:.3rem .8rem;
-  transition:color .18s;
-}
-.nav-btn .nav-icon{font-size:1.3rem;line-height:1}
+/* ── PROFILE ── */
+#s-profile{flex-direction:column}
+
+/* ── NAV BAR ── */
+#nav-bar{position:fixed;bottom:0;left:0;right:0;z-index:200;background:rgba(11,21,36,.97);backdrop-filter:blur(14px);border-top:1px solid var(--border);display:flex;justify-content:space-around;align-items:center;padding:.55rem 0 calc(.55rem + env(safe-area-inset-bottom))}
+.nav-btn{display:flex;flex-direction:column;align-items:center;gap:.2rem;font-family:var(--fh);font-size:.68rem;font-weight:600;color:var(--muted);background:none;border:none;cursor:pointer;padding:.3rem 1.2rem;transition:color .18s}
+.nav-btn .nav-icon{font-size:1.25rem;line-height:1}
 .nav-btn.active{color:var(--violet2)}
 
-/* animations */
 .fade-up{animation:fadeUp .35s ease}
-@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 
-/* responsive */
 @media(max-width:480px){
   .stat-row{grid-template-columns:1fr 1fr}
-  .quiz-body{padding:1.2rem .85rem 5rem}
+  .pin-digit{width:46px;height:56px;font-size:1.5rem}
+  .quiz-scroll{padding:1.1rem .85rem 1rem}
 }
 </style>
 </head>
 <body>
 
-<div id="toast"></div>
+<div id="toast-cont"></div>
 
 <!-- ══════════════════════════════
-     SCREEN: QUIEN SOY (sesión guardada)
+     SCREEN: AUTH (registro / login)
 ══════════════════════════════ -->
-<section id="s-whoami" class="screen">
-  <div class="card fade-up">
-    <div class="avatar-big" id="wa-avatar">?</div>
-    <h2 style="font-size:1.3rem" id="wa-name">Cargando...</h2>
-    <p class="text-muted mt-1" id="wa-meta"></p>
+<section id="s-auth" class="screen screen-center">
+  <div class="card fade-up" style="width:100%;max-width:400px">
 
-    <div style="margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid var(--border)">
-      <p style="font-size:.85rem;color:var(--muted);margin-bottom:.75rem">¿Eres tú?</p>
-      <button class="btn btn-primary w-full" onclick="App.continueSession()">✓ Sí, continuar</button>
-      <button class="btn btn-danger w-full mt-2" onclick="App.clearSession()">✕ No soy yo — cambiar cuenta</button>
+    <!-- Logo -->
+    <div class="text-center" style="margin-bottom:1.5rem">
+      <div class="logo">IntellectaQuiz</div>
+      <p class="text-muted mt-1">Plataforma de evaluaciones</p>
     </div>
+
+    <!-- Toggle tabs -->
+    <div class="tab-wrap">
+      <button class="tab-btn active" id="tab-login"    onclick="App.authTab('login')">Iniciar sesión</button>
+      <button class="tab-btn"        id="tab-register" onclick="App.authTab('register')">Registrarme</button>
+    </div>
+
+    <!-- ── LOGIN FORM ── -->
+    <div id="form-login">
+      <div class="field">
+        <label class="label">Nombre completo</label>
+        <input id="l-name" class="input" type="text" placeholder="Ej: María García López" autocomplete="name">
+      </div>
+      <div class="field mt-3">
+        <label class="label">Curso</label>
+        <select id="l-course" class="select"></select>
+      </div>
+      <div class="field mt-3">
+        <label class="label">PIN de 4 dígitos</label>
+        <div class="pin-row">
+          <input class="pin-digit" id="lp0" type="password" inputmode="numeric" maxlength="1">
+          <input class="pin-digit" id="lp1" type="password" inputmode="numeric" maxlength="1">
+          <input class="pin-digit" id="lp2" type="password" inputmode="numeric" maxlength="1">
+          <input class="pin-digit" id="lp3" type="password" inputmode="numeric" maxlength="1">
+        </div>
+      </div>
+      <button class="btn btn-primary w-full mt-5" id="btn-login" onclick="App.login()">Ingresar →</button>
+    </div>
+
+    <!-- ── REGISTER FORM ── -->
+    <div id="form-register" class="hidden">
+      <div class="field">
+        <label class="label">Nombre completo</label>
+        <input id="r-name" class="input" type="text" placeholder="Ej: María García López" autocomplete="name">
+      </div>
+      <div class="field mt-3">
+        <label class="label">Curso</label>
+        <select id="r-course" class="select"></select>
+      </div>
+      <div class="field mt-3">
+        <label class="label">Elige tu PIN de 4 dígitos</label>
+        <p class="text-muted" style="font-size:.75rem">Lo usarás para ingresar desde cualquier dispositivo.</p>
+        <div class="pin-row" style="margin-top:.5rem">
+          <input class="pin-digit" id="rp0" type="password" inputmode="numeric" maxlength="1">
+          <input class="pin-digit" id="rp1" type="password" inputmode="numeric" maxlength="1">
+          <input class="pin-digit" id="rp2" type="password" inputmode="numeric" maxlength="1">
+          <input class="pin-digit" id="rp3" type="password" inputmode="numeric" maxlength="1">
+        </div>
+      </div>
+      <button class="btn btn-primary w-full mt-5" id="btn-reg" onclick="App.register()">Crear cuenta →</button>
+    </div>
+
   </div>
 </section>
 
 <!-- ══════════════════════════════
-     SCREEN: REGISTRO
+     SCREEN: ¿ERES TÚ?
 ══════════════════════════════ -->
-<section id="s-register" class="screen">
-  <div class="card fade-up">
-    <div class="text-center" style="margin-bottom:1.5rem">
-      <div class="logo" style="font-size:1.9rem">IntellectaQuiz</div>
-      <p class="text-muted mt-1">Registro de estudiante</p>
+<section id="s-whoami" class="screen screen-center">
+  <div class="card fade-up" style="width:100%;max-width:370px;text-align:center">
+    <div class="avatar-big" id="wa-av">?</div>
+    <h2 style="font-size:1.2rem" id="wa-name">—</h2>
+    <p class="text-muted mt-1" id="wa-meta"></p>
+    <div style="margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid var(--border)">
+      <p class="text-muted" style="font-size:.82rem;margin-bottom:.75rem">¿Eres tú?</p>
+      <button class="btn btn-primary w-full" onclick="App.continueSession()">✓ Sí, continuar</button>
+      <button class="btn btn-danger w-full mt-2" onclick="App.goAuth()">↩ No soy yo</button>
     </div>
-
-    <div class="field">
-      <label class="label">Nombre completo</label>
-      <input id="r-name" class="input" type="text" placeholder="Ej: María García López" autocomplete="name">
-    </div>
-    <div class="field mt-3">
-      <label class="label">Nivel académico</label>
-      <select id="r-level" class="select">
-        <option value="">— Seleccionar —</option>
-        <option>Inicial</option>
-        <option>Primaria</option>
-        <option>Secundaria</option>
-      </select>
-    </div>
-    <div class="field mt-3">
-      <label class="label">Curso / Grado</label>
-      <select id="r-course" class="select">
-        <option value="">— Seleccionar —</option>
-      </select>
-    </div>
-
-    <button class="btn btn-primary w-full mt-5" id="btn-register" onclick="App.register()">
-      Registrarme →
-    </button>
-    <p class="text-muted text-center mt-3" style="font-size:.75rem">
-      Tu sesión quedará guardada en este dispositivo.
-    </p>
   </div>
 </section>
 
 <!-- ══════════════════════════════
      SCREEN: SALA DE ESPERA
 ══════════════════════════════ -->
-<section id="s-waiting" class="screen">
-  <div class="card fade-up">
+<section id="s-waiting" class="screen screen-center">
+  <div class="card fade-up" style="width:100%;max-width:390px;text-align:center">
     <div class="spin"></div>
-    <h2 style="font-size:1.3rem">Sala de espera</h2>
+    <h2 style="font-size:1.2rem">Sala de espera</h2>
     <p class="text-muted mt-2">El docente iniciará la evaluación en breve. Mantén esta pantalla abierta.</p>
-
     <div style="margin-top:1.25rem;padding:1rem;background:rgba(255,255,255,.04);border-radius:11px">
-      <div style="font-size:.78rem;color:var(--muted);margin-bottom:.4rem">Conectado como</div>
-      <div style="font-weight:600" id="w-name">—</div>
+      <div style="font-size:.75rem;color:var(--muted);margin-bottom:.3rem">Conectado como</div>
+      <div style="font-weight:700" id="w-name">—</div>
       <div style="font-size:.8rem;color:var(--muted)" id="w-meta">—</div>
     </div>
-
     <div class="badge badge-green mt-4" style="margin:1rem auto 0;width:fit-content">
       <span class="pulse"></span>
       <span id="w-count">0</span> estudiantes conectados
@@ -445,44 +334,46 @@ h1,h2,h3,h4{font-family:var(--fh);font-weight:700;line-height:1.15}
 ══════════════════════════════ -->
 <section id="s-quiz" class="screen">
   <header class="quiz-top">
-    <div style="display:flex;align-items:center;gap:.65rem">
+    <div style="display:flex;align-items:center;gap:.6rem">
       <span class="ql-brand">IQ</span>
       <div>
         <div style="font-size:.78rem;font-weight:600" id="qh-name"></div>
-        <div style="font-size:.7rem;color:var(--muted)" id="qh-course"></div>
+        <div style="font-size:.68rem;color:var(--muted)" id="qh-course"></div>
       </div>
     </div>
     <div style="display:flex;align-items:center;gap:.85rem">
       <div>
-        <div class="prog-wrap" style="width:100px">
+        <div class="prog-wrap" style="width:90px">
           <div class="prog-bar" id="q-prog" style="width:0%"></div>
         </div>
-        <div style="font-size:.68rem;color:var(--muted);text-align:right;margin-top:.15rem" id="q-prog-lbl">0/0</div>
+        <div style="font-size:.67rem;color:var(--muted);text-align:right;margin-top:.15rem" id="q-prog-lbl">0/0</div>
       </div>
       <div class="timer-num" id="q-timer">--:--</div>
     </div>
   </header>
 
-  <div class="quiz-body">
-    <!-- Preguntas activas -->
+  <div class="quiz-scroll">
     <div id="quiz-active">
       <div class="q-num-lbl" id="q-lbl">Pregunta 1 de 10</div>
-      <div class="q-text" id="q-text">Cargando...</div>
-      <div class="choices" id="q-choices"></div>
+      <div class="q-text"    id="q-text">Cargando…</div>
+      <div class="choices"   id="q-choices"></div>
       <div class="quiz-nav">
-        <button class="btn btn-outline btn-sm" id="btn-prev" onclick="App.prevQ()" style="display:none">← Anterior</button>
-        <button class="btn btn-primary btn-sm" id="btn-next" onclick="App.nextQ()">Siguiente →</button>
-        <button class="btn btn-green btn-sm hidden" id="btn-finish" onclick="App.finishQuiz()">✓ Terminar evaluación</button>
+        <button class="btn btn-outline btn-sm" id="btn-prev"   onclick="App.prevQ()"     style="display:none">← Anterior</button>
+        <button class="btn btn-primary btn-sm" id="btn-next"   onclick="App.nextQ()">Siguiente →</button>
+        <button class="btn btn-green   btn-sm hidden" id="btn-finish" onclick="App.finishQuiz()">✓ Terminar evaluación</button>
       </div>
     </div>
 
-    <!-- Terminó, esperando resultados -->
-    <div id="quiz-done" class="hidden">
+    <div id="quiz-done" class="hidden" style="text-align:center;padding:2.5rem 0">
       <div style="font-size:3rem;margin-bottom:.75rem">🎉</div>
-      <h2 style="font-size:1.35rem">¡Evaluación completada!</h2>
-      <p class="text-muted mt-2">Tus respuestas fueron guardadas. El docente habilitará los resultados cuando todos terminen.</p>
+      <h2 style="font-size:1.3rem">¡Evaluación completada!</h2>
+      <p class="text-muted mt-2">Tus respuestas fueron guardadas. El docente habilitará los resultados en breve.</p>
       <div class="badge badge-yellow mt-4" style="margin:1rem auto 0;width:fit-content">
         <span>⏳</span> Esperando al docente…
+      </div>
+      <div style="margin-top:1.75rem;display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap">
+        <button class="btn btn-ghost btn-sm" onclick="App.navTo('history')">📋 Historial</button>
+        <button class="btn btn-ghost btn-sm" onclick="App.navTo('profile')">👤 Perfil</button>
       </div>
     </div>
   </div>
@@ -492,42 +383,30 @@ h1,h2,h3,h4{font-family:var(--fh);font-weight:700;line-height:1.15}
      SCREEN: RESULTADOS
 ══════════════════════════════ -->
 <section id="s-results" class="screen">
-  <div class="card fade-up" style="margin-bottom:5rem">
-    <div class="text-center" style="margin-bottom:.75rem">
-      <h2 style="font-size:1.25rem">Tus Resultados</h2>
-    </div>
-
+  <div class="page-header">
+    <h2 style="font-size:1.1rem">Mis Resultados</h2>
+    <span class="badge badge-green" id="res-badge">—</span>
+  </div>
+  <div class="page-scroll">
     <div class="ring-wrap" id="res-ring" style="--p:0%">
       <span class="ring-pct" id="res-pct">0%</span>
       <span class="ring-lbl">puntaje</span>
     </div>
-
     <div class="text-center">
       <div style="font-weight:700;font-size:1rem" id="res-name"></div>
       <div class="text-muted" style="font-size:.8rem" id="res-meta"></div>
     </div>
-
     <div class="stat-row">
-      <div class="stat-box">
-        <div class="stat-val text-green" id="res-ok">0</div>
-        <div class="stat-lbl">Correctas</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-val text-red" id="res-bad">0</div>
-        <div class="stat-lbl">Incorrectas</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-val text-sky" id="res-total">0</div>
-        <div class="stat-lbl">Total</div>
-      </div>
+      <div class="stat-box"><div class="stat-val text-green" id="res-ok">0</div><div class="stat-lbl">Correctas</div></div>
+      <div class="stat-box"><div class="stat-val text-red"   id="res-bad">0</div><div class="stat-lbl">Incorrectas</div></div>
+      <div class="stat-box"><div class="stat-val text-sky"   id="res-total">0</div><div class="stat-lbl">Total</div></div>
     </div>
-    <div style="font-size:.8rem;color:var(--muted);text-align:center;margin-bottom:.75rem">
+    <div style="text-align:center;font-size:.8rem;color:var(--muted);margin-bottom:1rem">
       Tiempo: <strong id="res-time">—</strong>
     </div>
-
     <div style="display:flex;gap:.6rem;flex-wrap:wrap">
-      <button class="btn btn-primary" style="flex:1" onclick="App.downloadPDF()">📄 Descargar PDF</button>
-      <button class="btn btn-ghost" style="flex:1" onclick="App.openReview()">🔍 Revisar</button>
+      <button class="btn btn-primary" style="flex:1" id="res-pdf-btn" onclick="App.downloadPDF()">📄 Descargar PDF</button>
+      <button class="btn btn-ghost"   style="flex:1" onclick="App.openReview()">🔍 Revisar</button>
     </div>
   </div>
 </section>
@@ -535,38 +414,71 @@ h1,h2,h3,h4{font-family:var(--fh);font-weight:700;line-height:1.15}
 <!-- ══════════════════════════════
      SCREEN: HISTORIAL
 ══════════════════════════════ -->
-<section id="s-history" class="screen" style="padding-bottom:5rem">
-  <div class="hist-header">
-    <h2 style="font-size:1.15rem">Mis evaluaciones</h2>
-    <div class="badge badge-violet" id="hist-count-badge">0 registros</div>
+<section id="s-history" class="screen">
+  <div class="page-header">
+    <h2 style="font-size:1.1rem">Mis evaluaciones</h2>
+    <span class="badge badge-violet" id="hist-badge">0</span>
   </div>
-  <div class="hist-list" id="hist-list">
-    <p class="text-muted">Aún no tienes evaluaciones completadas.</p>
+  <div class="page-scroll">
+    <div class="hist-list" id="hist-list">
+      <p class="text-muted">Aún no tienes evaluaciones completadas.</p>
+    </div>
   </div>
 </section>
 
 <!-- ══════════════════════════════
-     NAV BAR INFERIOR
+     SCREEN: PERFIL
+══════════════════════════════ -->
+<section id="s-profile" class="screen">
+  <div class="page-header">
+    <h2 style="font-size:1.1rem">Mi perfil</h2>
+  </div>
+  <div class="page-scroll">
+    <div class="card text-center" style="margin-bottom:1rem">
+      <div class="avatar-big" id="prof-av" style="width:64px;height:64px;font-size:1.35rem">?</div>
+      <div style="font-weight:700;font-size:1.05rem;margin-top:.5rem" id="prof-name">—</div>
+      <div class="text-muted" style="font-size:.82rem" id="prof-meta">—</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:1rem">
+      <div class="card" style="padding:1rem;text-align:center">
+        <div style="font-family:var(--fh);font-size:1.9rem;font-weight:800" id="prof-count">0</div>
+        <div style="font-size:.72rem;color:var(--muted)">Evaluaciones</div>
+      </div>
+      <div class="card" style="padding:1rem;text-align:center">
+        <div style="font-family:var(--fh);font-size:1.9rem;font-weight:800" id="prof-avg">—</div>
+        <div style="font-size:.72rem;color:var(--muted)">Promedio</div>
+      </div>
+    </div>
+    <button class="btn btn-danger w-full" onclick="App.logout()">🚪 Cerrar sesión</button>
+    <p class="text-muted text-center mt-3" style="font-size:.75rem">
+      Tu historial queda guardado en este dispositivo.<br>
+      Para ingresar desde otro dispositivo usa tu nombre, curso y PIN.
+    </p>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     NAV BAR
 ══════════════════════════════ -->
 <nav id="nav-bar" class="hidden">
-  <button class="nav-btn active" id="nav-home" onclick="App.navTo('waiting')">
+  <button class="nav-btn active" id="nav-home" onclick="App.navTo('home')">
     <span class="nav-icon">🏠</span>Inicio
   </button>
   <button class="nav-btn" id="nav-hist" onclick="App.navTo('history')">
     <span class="nav-icon">📋</span>Historial
   </button>
-  <button class="nav-btn" id="nav-prof" onclick="App.openProfile()">
+  <button class="nav-btn" id="nav-prof" onclick="App.navTo('profile')">
     <span class="nav-icon">👤</span>Perfil
   </button>
 </nav>
 
 <!-- ══════════════════════════════
-     MODAL: REVISIÓN DE RESPUESTAS
+     MODAL: REVISIÓN
 ══════════════════════════════ -->
 <div id="m-review" class="overlay hidden">
-  <div class="modal" style="max-height:82vh;overflow-y:auto">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem">
-      <h3 style="font-size:1.1rem">Revisión de respuestas</h3>
+  <div class="modal">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.1rem">
+      <h3 style="font-size:1rem">Revisión de respuestas</h3>
       <button class="btn btn-outline btn-sm" onclick="App.closeReview()">✕</button>
     </div>
     <div id="review-body"></div>
@@ -574,34 +486,12 @@ h1,h2,h3,h4{font-family:var(--fh);font-weight:700;line-height:1.15}
 </div>
 
 <!-- ══════════════════════════════
-     MODAL: PERFIL
-══════════════════════════════ -->
-<div id="m-profile" class="overlay hidden">
-  <div class="modal">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem">
-      <h3 style="font-size:1.1rem">Mi perfil</h3>
-      <button class="btn btn-outline btn-sm" onclick="App.closeProfile()">✕</button>
-    </div>
-    <div style="text-align:center;margin-bottom:1.25rem">
-      <div class="avatar-big" id="prof-avatar" style="width:60px;height:60px;font-size:1.3rem">?</div>
-      <div style="font-weight:700;font-size:1rem;margin-top:.5rem" id="prof-name"></div>
-      <div class="text-muted" style="font-size:.82rem" id="prof-meta"></div>
-    </div>
-    <div style="background:rgba(255,255,255,.04);border-radius:11px;padding:1rem;margin-bottom:1rem">
-      <div style="font-size:.78rem;color:var(--muted);margin-bottom:.2rem">Evaluaciones completadas</div>
-      <div style="font-family:var(--fh);font-size:1.6rem;font-weight:800" id="prof-count">0</div>
-    </div>
-    <button class="btn btn-danger w-full" onclick="App.confirmClearSession()">🚪 Cerrar sesión</button>
-  </div>
-</div>
-
-<!-- ══════════════════════════════
-     MODAL: HISTORIAL DETALLE
+     MODAL: DETALLE HISTORIAL
 ══════════════════════════════ -->
 <div id="m-hist-detail" class="overlay hidden">
-  <div class="modal" style="max-height:82vh;overflow-y:auto">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem">
-      <h3 style="font-size:1.05rem" id="hd-title">Detalle</h3>
+  <div class="modal">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.1rem">
+      <h3 style="font-size:1rem" id="hd-title">Detalle</h3>
       <button class="btn btn-outline btn-sm" onclick="App.closeHistDetail()">✕</button>
     </div>
     <div id="hd-body"></div>
@@ -609,654 +499,612 @@ h1,h2,h3,h4{font-family:var(--fh);font-weight:700;line-height:1.15}
   </div>
 </div>
 
-<footer style="position:fixed;bottom:calc(56px + env(safe-area-inset-bottom));left:0;right:0;
-  text-align:center;padding:.3rem;font-size:.65rem;color:rgba(122,150,184,.4);pointer-events:none">
+<footer style="position:fixed;bottom:calc(56px + env(safe-area-inset-bottom));left:0;right:0;text-align:center;padding:.25rem;font-size:.62rem;color:rgba(122,150,184,.3);pointer-events:none;z-index:50">
   Kabert Studio — LMKE · IntellectaQuiz
 </footer>
 
 <script>
-/* ════════════════════════════════════════════════
-   INTELLECTAQUIZ — VERSIÓN ESTUDIANTE
-   Sesión persistente · Historial · Sin duplicados
-   ════════════════════════════════════════════════ */
 const App = (() => {
+
+  /* ── Cursos fijos Kinder → 6to Secundaria ── */
+  const COURSES = [
+    'Kinder',
+    '1° Primaria','2° Primaria','3° Primaria',
+    '4° Primaria','5° Primaria','6° Primaria',
+    '1° Secundaria','2° Secundaria','3° Secundaria',
+    '4° Secundaria','5° Secundaria','6° Secundaria',
+  ];
 
   /* ── Storage keys ── */
   const K = {
-    student: 'IQs_student',
-    answers: id => `IQs_answers_${id}`,
-    startTime: id => `IQs_start_${id}`,
-    history: 'IQs_history',
+    student : 'IQs3_student',
+    answers : id => `IQs3_ans_${id}`,
+    startT  : id => `IQs3_st_${id}`,
+    history : 'IQs3_history',
   };
 
   /* ── State ── */
   let S = {
-    fb: null,
-    student: null,      // { id, name, level, course }
-    session: null,      // session control doc data
-    questions: [],
-    answers: {},
-    currentQ: 0,
-    startTime: null,
-    results: null,
-    timerSec: 0,
-    timerRunning: false,
-    timerInterval: null,
-    history: [],        // array of past results
-    courses: ['1° Primaria','2° Primaria','3° Primaria','4° Primaria',
-              '5° Primaria','6° Primaria','1° Secundaria','2° Secundaria',
-              '3° Secundaria','4° Secundaria','5° Secundaria','6° Secundaria'],
-    reviewData: null,   // for detail modal from history
+    fb        : null,
+    student   : null,
+    session   : null,
+    questions : [],
+    answers   : {},
+    currentQ  : 0,
+    startTime : null,
+    results   : null,
+    timerSec  : 0,
+    timerInt  : null,
+    history   : [],
   };
 
-  /* ── LS helpers ── */
   const lsG = k => { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } };
-  const lsS = (k, v) => localStorage.setItem(k, JSON.stringify(v));
+  const lsS = (k,v) => localStorage.setItem(k, JSON.stringify(v));
   const lsD = k => localStorage.removeItem(k);
 
   /* ── Toast ── */
   function toast(msg, type='info') {
-    const icons = { info:'ℹ️', success:'✅', error:'❌', warn:'⚠️' };
+    const icons = {info:'ℹ️',success:'✅',error:'❌',warn:'⚠️'};
     const el = document.createElement('div');
     el.className = 'toast-item';
     el.innerHTML = `${icons[type]||'ℹ️'} ${msg}`;
-    document.getElementById('toast').appendChild(el);
-    setTimeout(() => { el.style.animation='tOut .28s ease forwards'; setTimeout(() => el.remove(), 300); }, 3000);
+    document.getElementById('toast-cont').appendChild(el);
+    setTimeout(() => { el.style.animation='tOut .28s ease forwards'; setTimeout(()=>el.remove(),300); }, 3000);
   }
 
-  /* ── Screen ── */
+  /* ── Show screen ── */
   function show(name) {
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-    const el = document.getElementById('s-'+name);
-    if (el) el.classList.add('active');
-    // Nav bar visibility
-    const showNav = ['waiting','results','history'].includes(name);
-    document.getElementById('nav-bar').classList.toggle('hidden', !showNav);
-    // Active nav
+    document.getElementById('s-'+name)?.classList.add('active');
+    const appScreens = ['waiting','quiz','results','history','profile'];
+    document.getElementById('nav-bar').classList.toggle('hidden', !appScreens.includes(name));
     ['home','hist','prof'].forEach(n => document.getElementById('nav-'+n)?.classList.remove('active'));
-    if (name === 'waiting') document.getElementById('nav-home')?.classList.add('active');
+    if (['waiting','quiz','results'].includes(name)) document.getElementById('nav-home')?.classList.add('active');
     if (name === 'history') document.getElementById('nav-hist')?.classList.add('active');
-    if (name === 'results') document.getElementById('nav-home')?.classList.add('active');
+    if (name === 'profile') document.getElementById('nav-prof')?.classList.add('active');
   }
 
-  function navTo(name) {
-    if (name === 'waiting' && S.session?.status === 'running' && !S.results) {
-      show('quiz'); return;
+  /* ── navTo ── */
+  function navTo(dest) {
+    if (dest === 'home') {
+      if (S.results)                                          { show('results');  return; }
+      if (S.session?.status === 'running' && S.questions.length) { show('quiz'); return; }
+      show('waiting'); return;
     }
-    if (name === 'waiting' && S.results) { show('results'); return; }
-    show(name);
-    if (name === 'history') renderHistory();
+    show(dest);
+    if (dest === 'history') renderHistory();
+    if (dest === 'profile') renderProfile();
   }
 
-  /* ════════════════════════════════════
-     BOOT — decide qué pantalla mostrar
-  ════════════════════════════════════ */
-  function boot() {
-    S.history = lsG(K.history) || [];
-    const saved = lsG(K.student);
-    if (saved && saved.id && saved.name) {
-      S.student = saved;
-      showWhoAmI(saved);
-    } else {
-      loadCoursesAndShow();
-    }
-  }
-
-  function showWhoAmI(stu) {
-    const initials = stu.name.split(' ').slice(0,2).map(n=>n[0]).toUpperCase().join('');
-    document.getElementById('wa-avatar').textContent = initials;
-    document.getElementById('wa-name').textContent = stu.name;
-    document.getElementById('wa-meta').textContent = `${stu.course} · ${stu.level}`;
-    show('whoami');
-  }
-
-  function continueSession() {
-    connectStudent(S.student);
-  }
-
-  function clearSession() {
-    if (!confirm('¿Cerrar sesión? Deberás registrarte de nuevo.')) return;
-    lsD(K.student);
-    S.student = null;
-    loadCoursesAndShow();
-  }
-
-  function confirmClearSession() {
-    closeProfile();
-    setTimeout(() => clearSession(), 200);
-  }
-
-  /* ═══════════ REGISTER ═══════════ */
-  function loadCoursesAndShow() {
-    // Try to load courses from Firebase
-    if (S.fb) {
-      const { db, doc, getDoc } = S.fb;
-      getDoc(doc(db, 'config', 'courses'))
-        .then(snap => {
-          if (snap.exists() && snap.data().list) {
-            S.courses = snap.data().list;
-          }
-          populateCourses();
-          show('register');
-        })
-        .catch(() => { populateCourses(); show('register'); });
-    } else {
-      populateCourses();
-      show('register');
-    }
-  }
-
+  /* ── Populate course selects ── */
   function populateCourses() {
-    const sel = document.getElementById('r-course');
-    sel.innerHTML = '<option value="">— Seleccionar —</option>';
-    S.courses.forEach(c => {
-      const o = document.createElement('option');
-      o.value = c; o.textContent = c;
-      sel.appendChild(o);
+    ['l-course','r-course'].forEach(id => {
+      const sel = document.getElementById(id);
+      if (!sel) return;
+      sel.innerHTML = '<option value="">— Seleccionar curso —</option>';
+      COURSES.forEach(c => {
+        const o = document.createElement('option');
+        o.value = c; o.textContent = c; sel.appendChild(o);
+      });
     });
   }
 
-  async function register() {
-    const name   = document.getElementById('r-name').value.trim();
-    const level  = document.getElementById('r-level').value;
-    const course = document.getElementById('r-course').value;
+  /* ── PIN helpers ── */
+  function setupPins() {
+    ['lp','rp'].forEach(prefix => {
+      [0,1,2,3].forEach(i => {
+        const el = document.getElementById(prefix+i);
+        if (!el) return;
+        el.addEventListener('input', e => {
+          const v = e.target.value.replace(/\D/g,'');
+          e.target.value = v ? v[v.length-1] : '';
+          if (v && i < 3) document.getElementById(prefix+(i+1))?.focus();
+        });
+        el.addEventListener('keydown', e => {
+          if (e.key==='Backspace' && !e.target.value && i>0)
+            document.getElementById(prefix+(i-1))?.focus();
+        });
+      });
+    });
+  }
 
-    if (!name)   { toast('Ingresa tu nombre completo', 'warn'); return; }
-    if (!level)  { toast('Selecciona tu nivel académico', 'warn'); return; }
-    if (!course) { toast('Selecciona tu curso', 'warn'); return; }
+  function getPin(prefix) {
+    return [0,1,2,3].map(i => document.getElementById(prefix+i)?.value||'').join('');
+  }
 
-    const btn = document.getElementById('btn-register');
-    btn.disabled = true;
-    btn.textContent = 'Verificando…';
+  function clearPin(prefix) {
+    [0,1,2,3].forEach(i => { const el = document.getElementById(prefix+i); if(el) el.value=''; });
+  }
 
-    // Check duplicate name in Firebase
+  /* ═══════════ BOOT ═══════════ */
+  function boot() {
+    S.history = lsG(K.history) || [];
+    populateCourses();
+    setupPins();
+
+    const saved = lsG(K.student);
+    if (saved?.id && saved?.name) {
+      S.student = saved;
+      const initials = saved.name.split(' ').slice(0,2).map(n=>n[0]).toUpperCase().join('');
+      document.getElementById('wa-av').textContent   = initials;
+      document.getElementById('wa-name').textContent = saved.name;
+      document.getElementById('wa-meta').textContent = saved.course;
+      show('whoami');
+    } else {
+      show('auth');
+      authTab('login');
+    }
+  }
+
+  /* ═══════════ AUTH TAB ═══════════ */
+  function authTab(tab) {
+    document.getElementById('form-login').classList.toggle('hidden',    tab !== 'login');
+    document.getElementById('form-register').classList.toggle('hidden', tab !== 'register');
+    document.getElementById('tab-login').classList.toggle('active',    tab === 'login');
+    document.getElementById('tab-register').classList.toggle('active', tab === 'register');
+  }
+
+  function goAuth() { show('auth'); authTab('login'); }
+
+  /* ═══════════ WHO AM I ═══════════ */
+  function continueSession() { connectStudent(S.student); }
+
+  /* ═══════════ LOGIN ═══════════ */
+  async function login() {
+    const name   = document.getElementById('l-name').value.trim();
+    const course = document.getElementById('l-course').value;
+    const pin    = getPin('lp');
+
+    if (!name)         { toast('Ingresa tu nombre completo','warn'); return; }
+    if (!course)       { toast('Selecciona tu curso','warn'); return; }
+    if (pin.length<4)  { toast('Ingresa tu PIN de 4 dígitos','warn'); return; }
+
+    const btn = document.getElementById('btn-login');
+    btn.disabled=true; btn.textContent='Verificando…';
+
+    let found = null;
+
     if (S.fb) {
       try {
         const { db, collection, query, where, getDocs } = S.fb;
-        const q = query(collection(db, 'students'), where('name', '==', name));
+        const q = query(collection(db,'students'), where('name','==',name), where('course','==',course));
+        const snap = await getDocs(q);
+        snap.forEach(d => { const data=d.data(); if(data.pin===pin) found={id:d.id,...data}; });
+      } catch { /* offline */ }
+    }
+
+    // Offline fallback
+    if (!found) {
+      const saved = lsG(K.student);
+      if (saved?.name?.toLowerCase()===name.toLowerCase() &&
+          saved?.course===course && saved?.pin===pin) found=saved;
+    }
+
+    btn.disabled=false; btn.textContent='Ingresar →';
+
+    if (!found) {
+      toast('Nombre, curso o PIN incorrecto','error');
+      clearPin('lp'); return;
+    }
+
+    S.student = { id:found.id, name:found.name, course:found.course, pin:found.pin };
+    lsS(K.student, S.student);
+    connectStudent(S.student);
+  }
+
+  /* ═══════════ REGISTER ═══════════ */
+  async function register() {
+    const name   = document.getElementById('r-name').value.trim();
+    const course = document.getElementById('r-course').value;
+    const pin    = getPin('rp');
+
+    if (!name)        { toast('Ingresa tu nombre completo','warn'); return; }
+    if (!course)      { toast('Selecciona tu curso','warn'); return; }
+    if (pin.length<4) { toast('Elige un PIN de 4 dígitos','warn'); return; }
+
+    const btn = document.getElementById('btn-reg');
+    btn.disabled=true; btn.textContent='Creando cuenta…';
+
+    // Check duplicate
+    if (S.fb) {
+      try {
+        const { db, collection, query, where, getDocs } = S.fb;
+        const q = query(collection(db,'students'), where('name','==',name), where('course','==',course));
         const snap = await getDocs(q);
         if (!snap.empty) {
-          toast(`Ya existe un estudiante llamado "${name}". Usa tu nombre completo.`, 'error');
-          btn.disabled = false; btn.textContent = 'Registrarme →';
-          return;
+          toast('Ya existe una cuenta con ese nombre y curso. Inicia sesión.','error');
+          btn.disabled=false; btn.textContent='Crear cuenta →'; return;
         }
-      } catch (e) {
-        // Firebase unavailable — continue offline
-      }
+      } catch { /* offline */ }
     }
 
     const student = {
-      id: 'stu_' + Date.now() + '_' + Math.random().toString(36).slice(2,7),
-      name, level, course,
-      registeredAt: Date.now(),
+      id: 'stu_'+Date.now()+'_'+Math.random().toString(36).slice(2,6),
+      name, course, pin, registeredAt: Date.now(),
     };
+
+    if (S.fb) {
+      const { db, doc, setDoc, serverTimestamp } = S.fb;
+      setDoc(doc(db,'students',student.id), {
+        ...student, status:'waiting', progress:0,
+        finished:false, score:null, joinedAt:serverTimestamp(),
+      }).catch(()=>{});
+    }
 
     lsS(K.student, student);
     S.student = student;
-
-    btn.disabled = false; btn.textContent = 'Registrarme →';
+    btn.disabled=false; btn.textContent='Crear cuenta →';
+    toast('¡Cuenta creada!','success');
     connectStudent(student);
   }
 
-  /* ═══════════ CONNECT TO SESSION ═══════════ */
+  /* ═══════════ CONNECT ═══════════ */
   function connectStudent(student) {
-    // Register presence in Firebase
-    if (S.fb) {
-      const { db, doc, setDoc, serverTimestamp } = S.fb;
-      setDoc(doc(db, 'students', student.id), {
-        ...student, status: 'waiting', progress: 0,
-        finished: false, score: null, joinedAt: serverTimestamp(),
-      }).catch(() => {});
-    }
-
-    // Fill waiting screen
-    document.getElementById('w-name').textContent = student.name;
-    document.getElementById('w-meta').textContent = `${student.course} · ${student.level}`;
-    document.getElementById('qh-name').textContent = student.name;
+    document.getElementById('w-name').textContent    = student.name;
+    document.getElementById('w-meta').textContent    = student.course;
+    document.getElementById('qh-name').textContent   = student.name;
     document.getElementById('qh-course').textContent = student.course;
+
+    if (S.fb) {
+      const { db, doc, updateDoc, setDoc, serverTimestamp } = S.fb;
+      updateDoc(doc(db,'students',student.id), { status:'waiting', progress:0 })
+        .catch(() => setDoc(doc(db,'students',student.id), {
+          ...student, status:'waiting', progress:0,
+          finished:false, score:null, joinedAt:serverTimestamp(),
+        }).catch(()=>{}));
+    }
 
     show('waiting');
     startSessionListener();
-    startStudentsCountListener();
+    startCountListener();
   }
 
-  /* ═══════════ FIREBASE LISTENERS ═══════════ */
+  /* ═══════════ LISTENERS ═══════════ */
   function startSessionListener() {
     if (!S.fb) return;
     const { db, doc, onSnapshot } = S.fb;
-    onSnapshot(doc(db, 'session', 'control'), snap => {
+    onSnapshot(doc(db,'session','control'), snap => {
       if (!snap.exists()) return;
       const data = snap.data();
       S.session = data;
 
-      // Timer sync
-      if (typeof data.timer === 'number') {
-        S.timerSec = data.timer;
-        updateTimerDisplay();
+      if (typeof data.timer === 'number') { S.timerSec=data.timer; updateTimerDisplay(); }
+
+      if (data.status==='running' && !S.results) {
+        const cur = document.querySelector('.screen.active')?.id;
+        if (cur==='s-waiting') startQuiz(data.questions||[]);
       }
 
-      // Status changes
-      if (data.status === 'running' && !S.results) {
-        const currentScreen = document.querySelector('.screen.active')?.id;
-        if (currentScreen === 's-waiting') {
-          startQuiz(data.questions || []);
-        }
-        // If already in quiz, keep going
-      }
-
-      if (data.status === 'idle' || data.status === 'stopped') {
-        // Session ended — don't kick student out if finished
-        if (!S.results) {
-          toast('La evaluación ha sido detenida', 'warn');
-        }
-      }
-
-      if (data.resultsUnlocked && S.results && document.getElementById('s-quiz').classList.contains('active')) {
-        showResults();
-      }
-      // If already on results screen, refresh
-      if (data.resultsUnlocked && S.results && document.getElementById('s-results').classList.contains('active')) {
-        // already shown
+      if (data.resultsUnlocked && S.results) {
+        const cur = document.querySelector('.screen.active')?.id;
+        if (cur==='s-quiz') showResults();
       }
     });
   }
 
-  function startStudentsCountListener() {
+  function startCountListener() {
     if (!S.fb) return;
     const { db, collection, onSnapshot } = S.fb;
-    onSnapshot(collection(db, 'students'), snap => {
-      document.getElementById('w-count').textContent = snap.size;
+    onSnapshot(collection(db,'students'), snap => {
+      const el = document.getElementById('w-count');
+      if (el) el.textContent = snap.size;
     });
   }
 
   /* ═══════════ QUIZ ═══════════ */
   function startQuiz(questions) {
     S.questions = questions;
-    S.answers = lsG(K.answers(S.student.id)) || {};
-    S.currentQ = 0;
-    if (!S.startTime) {
-      S.startTime = lsG(K.startTime(S.student.id)) || Date.now();
-      lsS(K.startTime(S.student.id), S.startTime);
-    }
+    S.answers   = lsG(K.answers(S.student.id)) || {};
+    S.currentQ  = 0;
+    S.startTime = lsG(K.startT(S.student.id)) || Date.now();
+    lsS(K.startT(S.student.id), S.startTime);
+    document.getElementById('quiz-active').classList.remove('hidden');
+    document.getElementById('quiz-done').classList.add('hidden');
     show('quiz');
     renderQ();
     startTimerTick();
-    toast('¡La evaluación ha comenzado!', 'success');
+    toast('¡La evaluación ha comenzado!','success');
   }
 
   function renderQ() {
-    const qs = S.questions;
-    if (!qs.length) return;
-    const i = S.currentQ;
-    const q = qs[i];
-
+    const qs=S.questions; if(!qs.length) return;
+    const i=S.currentQ, q=qs[i];
     document.getElementById('q-lbl').textContent  = `Pregunta ${i+1} de ${qs.length}`;
     document.getElementById('q-text').textContent = q.text;
 
-    const letters = ['A','B','C','D'];
-    const cont = document.getElementById('q-choices');
-    cont.innerHTML = '';
-    q.options.forEach((opt, oi) => {
-      const l = letters[oi];
-      const btn = document.createElement('button');
-      btn.className = 'choice' + (S.answers[i] === l ? ' sel' : '');
-      btn.innerHTML = `<span class="ch-letter">${l}</span>${opt.text}`;
-      btn.onclick = () => selectAnswer(i, l, btn, cont);
+    const letters=['A','B','C','D'];
+    const cont=document.getElementById('q-choices');
+    cont.innerHTML='';
+    q.options.forEach((opt,oi)=>{
+      const l=letters[oi], btn=document.createElement('button');
+      btn.className='choice'+(S.answers[i]===l?' sel':'');
+      btn.innerHTML=`<span class="ch-letter">${l}</span>${opt.text}`;
+      btn.onclick=()=>selectAnswer(i,l,btn,cont);
       cont.appendChild(btn);
     });
 
-    // Progress
-    const answered = Object.keys(S.answers).length;
-    const pct = Math.round((answered / qs.length) * 100);
-    document.getElementById('q-prog').style.width = pct + '%';
-    document.getElementById('q-prog-lbl').textContent = `${answered}/${qs.length}`;
+    const answered=Object.keys(S.answers).length;
+    document.getElementById('q-prog').style.width=Math.round((answered/qs.length)*100)+'%';
+    document.getElementById('q-prog-lbl').textContent=`${answered}/${qs.length}`;
 
-    // Nav buttons
-    const prevBtn   = document.getElementById('btn-prev');
-    const nextBtn   = document.getElementById('btn-next');
-    const finishBtn = document.getElementById('btn-finish');
-    prevBtn.style.display = i > 0 ? '' : 'none';
-    const isLast = i === qs.length - 1;
-    nextBtn.classList.toggle('hidden', isLast);
-    finishBtn.classList.toggle('hidden', !isLast);
+    document.getElementById('btn-prev').style.display = i>0 ? '':'none';
+    const last=i===qs.length-1;
+    document.getElementById('btn-next').classList.toggle('hidden',last);
+    document.getElementById('btn-finish').classList.toggle('hidden',!last);
 
-    // Update progress in Firebase
     if (S.fb && S.student) {
       const { db, doc, updateDoc } = S.fb;
-      updateDoc(doc(db, 'students', S.student.id), {
-        progress: Math.round((i / qs.length) * 100)
-      }).catch(() => {});
+      updateDoc(doc(db,'students',S.student.id), { progress:Math.round((i/qs.length)*100) }).catch(()=>{});
     }
   }
 
-  function selectAnswer(qIndex, letter, btnEl, container) {
-    S.answers[qIndex] = letter;
-    lsS(K.answers(S.student.id), S.answers);
-
-    container.querySelectorAll('.choice').forEach(b => b.classList.remove('sel'));
+  function selectAnswer(qIdx,letter,btnEl,cont) {
+    S.answers[qIdx]=letter;
+    lsS(K.answers(S.student.id),S.answers);
+    cont.querySelectorAll('.choice').forEach(b=>b.classList.remove('sel'));
     btnEl.classList.add('sel');
-
-    const answered = Object.keys(S.answers).length;
-    const pct = Math.round((answered / S.questions.length) * 100);
-    document.getElementById('q-prog').style.width = pct + '%';
-    document.getElementById('q-prog-lbl').textContent = `${answered}/${S.questions.length}`;
+    const answered=Object.keys(S.answers).length;
+    document.getElementById('q-prog').style.width=Math.round((answered/S.questions.length)*100)+'%';
+    document.getElementById('q-prog-lbl').textContent=`${answered}/${S.questions.length}`;
   }
 
-  function nextQ() {
-    if (S.currentQ < S.questions.length - 1) { S.currentQ++; renderQ(); }
-  }
-  function prevQ() {
-    if (S.currentQ > 0) { S.currentQ--; renderQ(); }
-  }
+  function nextQ() { if(S.currentQ<S.questions.length-1){ S.currentQ++; renderQ(); } }
+  function prevQ() { if(S.currentQ>0){ S.currentQ--; renderQ(); } }
 
   function finishQuiz() {
-    const unanswered = S.questions.length - Object.keys(S.answers).length;
-    if (unanswered > 0) {
-      if (!confirm(`Tienes ${unanswered} pregunta(s) sin responder. ¿Deseas terminar de todos modos?`)) return;
-    }
+    const unanswered=S.questions.length-Object.keys(S.answers).length;
+    if (unanswered>0 && !confirm(`${unanswered} pregunta(s) sin responder. ¿Terminar de todos modos?`)) return;
 
-    const endTime = Date.now();
-    const elapsed = Math.round((endTime - S.startTime) / 1000);
+    const elapsed=Math.round((Date.now()-S.startTime)/1000);
+    let correct=0;
+    S.questions.forEach((q,i)=>{ if(S.answers[i]===q.correctAnswer) correct++; });
+    const score=Math.round((correct/S.questions.length)*100);
 
-    let correct = 0;
-    S.questions.forEach((q, i) => {
-      if (S.answers[i] === q.correctAnswer) correct++;
+    S.results={
+      correct, wrong:S.questions.length-correct, total:S.questions.length,
+      score, elapsed, date:new Date().toLocaleDateString('es-BO'),
+      questions:S.questions, answers:{...S.answers},
+    };
+
+    S.history.unshift({
+      id:Date.now(), name:S.student.name, course:S.student.course,
+      score, correct, wrong:S.results.wrong, total:S.questions.length, elapsed,
+      date:new Date().toLocaleDateString('es-BO',{year:'numeric',month:'short',day:'numeric'}),
+      questions:S.questions, answers:{...S.answers},
     });
-    const score = Math.round((correct / S.questions.length) * 100);
-
-    S.results = {
-      correct, wrong: S.questions.length - correct,
-      total: S.questions.length, score, elapsed,
-      date: new Date().toLocaleDateString('es-BO'),
-      questions: S.questions,
-      answers: { ...S.answers },
-    };
-
-    // Save to history
-    const histEntry = {
-      id: Date.now(),
-      name: S.student.name,
-      course: S.student.course,
-      level: S.student.level,
-      score, correct,
-      wrong: S.results.wrong,
-      total: S.questions.length,
-      elapsed,
-      date: new Date().toLocaleDateString('es-BO', { year:'numeric', month:'short', day:'numeric' }),
-      questions: S.questions,
-      answers: { ...S.answers },
-    };
-    S.history.unshift(histEntry);
     lsS(K.history, S.history);
 
-    // Push to Firebase
     if (S.fb && S.student) {
       const { db, doc, updateDoc } = S.fb;
-      updateDoc(doc(db, 'students', S.student.id), {
-        finished: true, score, correct, wrong: S.results.wrong,
-        elapsed, finishedAt: Date.now(), progress: 100
-      }).catch(() => {});
+      updateDoc(doc(db,'students',S.student.id), {
+        finished:true, score, correct, wrong:S.results.wrong,
+        elapsed, finishedAt:Date.now(), progress:100,
+      }).catch(()=>{});
     }
 
-    // Check if results already unlocked
+    document.getElementById('quiz-active').classList.add('hidden');
+    document.getElementById('quiz-done').classList.remove('hidden');
+
     if (S.session?.resultsUnlocked) {
       showResults();
-    } else {
-      // Show "waiting for teacher" state
-      document.getElementById('quiz-active').classList.add('hidden');
-      document.getElementById('quiz-done').classList.remove('hidden');
-      // Keep listening for unlock
-      if (S.fb) {
-        const { db, doc, onSnapshot } = S.fb;
-        onSnapshot(doc(db, 'session', 'control'), snap => {
-          if (snap.exists() && snap.data().resultsUnlocked) showResults();
-        });
-      }
+    } else if (S.fb) {
+      const { db, doc, onSnapshot } = S.fb;
+      onSnapshot(doc(db,'session','control'), snap => {
+        if (snap.exists() && snap.data().resultsUnlocked && S.results) showResults();
+      });
     }
-    toast('Evaluación enviada ✓', 'success');
+    toast('Evaluación enviada ✓','success');
   }
 
   /* ═══════════ RESULTS ═══════════ */
   function showResults() {
     if (!S.results) return;
-    const { correct, wrong, total, score, elapsed } = S.results;
-    const pct = score + '%';
-    document.getElementById('res-ring').style.setProperty('--p', pct);
-    document.getElementById('res-pct').textContent = pct;
-    document.getElementById('res-ok').textContent   = correct;
-    document.getElementById('res-bad').textContent  = wrong;
+    const { correct,wrong,total,score,elapsed } = S.results;
+    document.getElementById('res-ring').style.setProperty('--p', score+'%');
+    document.getElementById('res-pct').textContent   = score+'%';
+    document.getElementById('res-ok').textContent    = correct;
+    document.getElementById('res-bad').textContent   = wrong;
     document.getElementById('res-total').textContent = total;
-    document.getElementById('res-name').textContent = S.student.name;
-    document.getElementById('res-meta').textContent = `${S.student.course} · ${S.student.level}`;
-    const m = Math.floor(elapsed/60), s = elapsed%60;
-    document.getElementById('res-time').textContent = `${m}m ${s}s`;
+    document.getElementById('res-name').textContent  = S.student.name;
+    document.getElementById('res-meta').textContent  = S.student.course;
+    const badge = score>=70 ? 'badge-green' : score>=50 ? 'badge-yellow' : 'badge-red';
+    const label = score>=70 ? '✓ Aprobado'  : score>=50 ? '~ Regular'    : '✗ Por mejorar';
+    const badgeEl = document.getElementById('res-badge');
+    badgeEl.className='badge '+badge; badgeEl.textContent=label;
+    const m=Math.floor(elapsed/60), s=elapsed%60;
+    document.getElementById('res-time').textContent=`${m}m ${s}s`;
+    // ensure PDF button is always active
+    const pdfBtn=document.getElementById('res-pdf-btn');
+    pdfBtn.disabled=false; pdfBtn.textContent='📄 Descargar PDF';
     show('results');
   }
 
   /* ═══════════ TIMER ═══════════ */
   function startTimerTick() {
-    clearInterval(S.timerInterval);
-    S.timerInterval = setInterval(() => {
-      if (S.timerSec > 0) { S.timerSec--; updateTimerDisplay(); }
-      else { clearInterval(S.timerInterval); toast('¡Tiempo agotado!', 'warn'); }
-    }, 1000);
+    clearInterval(S.timerInt);
+    S.timerInt=setInterval(()=>{ if(S.timerSec>0){ S.timerSec--; updateTimerDisplay(); } else clearInterval(S.timerInt); },1000);
   }
-
   function updateTimerDisplay() {
-    const m = Math.floor(S.timerSec/60), s = S.timerSec%60;
-    const str = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
-    const el = document.getElementById('q-timer');
-    if (el) { el.textContent = str; el.className = 'timer-num' + (S.timerSec < 120 ? ' urgent' : ''); }
+    const m=Math.floor(S.timerSec/60), s=S.timerSec%60;
+    const el=document.getElementById('q-timer');
+    if(el){ el.textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`; el.className='timer-num'+(S.timerSec<120?' urgent':''); }
   }
 
   /* ═══════════ HISTORY ═══════════ */
   function renderHistory() {
-    const list = document.getElementById('hist-list');
-    const badge = document.getElementById('hist-count-badge');
-    badge.textContent = `${S.history.length} registro${S.history.length !== 1 ? 's' : ''}`;
-
-    if (!S.history.length) {
-      list.innerHTML = '<p class="text-muted">Aún no tienes evaluaciones completadas.</p>';
-      return;
-    }
-    list.innerHTML = '';
-    S.history.forEach((h, idx) => {
-      const color = h.score >= 70 ? 'var(--green)' : h.score >= 50 ? 'var(--yellow)' : 'var(--red)';
-      const bg    = h.score >= 70 ? 'rgba(30,217,160,.15)' : h.score >= 50 ? 'rgba(249,200,70,.15)' : 'rgba(244,112,107,.12)';
-      const card  = document.createElement('div');
-      card.className = 'hist-card fade-up';
-      card.innerHTML = `
+    const list=document.getElementById('hist-list');
+    const badge=document.getElementById('hist-badge');
+    badge.textContent=S.history.length+' registro'+(S.history.length!==1?'s':'');
+    if (!S.history.length) { list.innerHTML='<p class="text-muted">Aún no tienes evaluaciones completadas.</p>'; return; }
+    list.innerHTML='';
+    S.history.forEach(h=>{
+      const color=h.score>=70?'var(--green)':h.score>=50?'var(--yellow)':'var(--red)';
+      const bg=h.score>=70?'rgba(30,217,160,.15)':h.score>=50?'rgba(249,200,70,.15)':'rgba(244,112,107,.12)';
+      const c=document.createElement('div'); c.className='hist-card fade-up';
+      c.innerHTML=`
         <div class="hist-score" style="background:${bg};color:${color}">${h.score}%</div>
         <div class="hist-info">
-          <div class="hist-title">${h.course} · ${h.level}</div>
+          <div class="hist-title">${h.course}</div>
           <div class="hist-meta">${h.correct}/${h.total} correctas · ${h.date}</div>
         </div>
         <span style="color:var(--muted);font-size:1.2rem">›</span>`;
-      card.onclick = () => openHistDetail(h);
-      list.appendChild(card);
+      c.onclick=()=>openHistDetail(h);
+      list.appendChild(c);
     });
   }
 
   function openHistDetail(h) {
-    S.reviewData = h;
-    document.getElementById('hd-title').textContent = `${h.date} · ${h.score}%`;
-    const body = document.getElementById('hd-body');
-    body.innerHTML = `
+    document.getElementById('hd-title').textContent=`${h.date} · ${h.score}%`;
+    const body=document.getElementById('hd-body');
+    body.innerHTML=`
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;margin-bottom:1rem">
         <div class="stat-box"><div class="stat-val text-green">${h.correct}</div><div class="stat-lbl">Correctas</div></div>
         <div class="stat-box"><div class="stat-val text-red">${h.wrong}</div><div class="stat-lbl">Incorrectas</div></div>
         <div class="stat-box"><div class="stat-val text-sky">${h.score}%</div><div class="stat-lbl">Puntaje</div></div>
       </div>
-      ${h.questions ? h.questions.map((q, i) => {
-        const isOk = h.answers[i] === q.correctAnswer;
-        return `<div style="padding:.65rem 0;border-bottom:1px solid var(--border)">
-          <div style="display:flex;gap:.4rem;align-items:flex-start;margin-bottom:.3rem">
-            <span>${isOk ? '✅' : '❌'}</span>
-            <strong style="font-size:.85rem">${i+1}. ${q.text}</strong>
+      ${(h.questions||[]).map((q,i)=>{
+        const ok=h.answers[i]===q.correctAnswer;
+        return `<div style="padding:.6rem 0;border-bottom:1px solid var(--border)">
+          <div style="display:flex;gap:.4rem;align-items:flex-start;margin-bottom:.25rem">
+            <span>${ok?'✅':'❌'}</span>
+            <strong style="font-size:.83rem">${i+1}. ${q.text}</strong>
           </div>
-          <div style="font-size:.78rem;color:var(--muted);padding-left:1.3rem">
-            Tu respuesta: <span class="${isOk ? 'text-green' : 'text-red'}">${h.answers[i]||'—'}</span>
+          <div style="font-size:.76rem;color:var(--muted);padding-left:1.3rem">
+            Tu respuesta: <span class="${ok?'text-green':'text-red'}">${h.answers[i]||'—'}</span>
             &nbsp;·&nbsp; Correcta: <span class="text-green">${q.correctAnswer}</span>
           </div>
         </div>`;
-      }).join('') : '<p class="text-muted">Sin detalle de preguntas.</p>'}`;
-
-    document.getElementById('hd-pdf-btn').onclick = () => downloadHistPDF(h);
+      }).join('')}`;
+    document.getElementById('hd-pdf-btn').onclick=()=>downloadHistPDF(h);
     document.getElementById('m-hist-detail').classList.remove('hidden');
   }
   function closeHistDetail() { document.getElementById('m-hist-detail').classList.add('hidden'); }
 
-  /* ═══════════ REVIEW MODAL ═══════════ */
+  /* ═══════════ PROFILE ═══════════ */
+  function renderProfile() {
+    if (!S.student) return;
+    const initials=S.student.name.split(' ').slice(0,2).map(n=>n[0]).toUpperCase().join('');
+    document.getElementById('prof-av').textContent   = initials;
+    document.getElementById('prof-name').textContent = S.student.name;
+    document.getElementById('prof-meta').textContent = S.student.course;
+    document.getElementById('prof-count').textContent= S.history.length;
+    const avg=S.history.length ? Math.round(S.history.reduce((a,h)=>a+h.score,0)/S.history.length)+'%' : '—';
+    document.getElementById('prof-avg').textContent  = avg;
+  }
+
+  function logout() {
+    if (!confirm('¿Cerrar sesión? Podrás volver con tu nombre, curso y PIN.')) return;
+    lsD(K.student); S.student=null; S.results=null; S.questions=[]; S.answers={};
+    clearInterval(S.timerInt);
+    show('auth'); authTab('login');
+  }
+
+  /* ═══════════ REVIEW ═══════════ */
   function openReview() {
     if (!S.results) return;
-    const body = document.getElementById('review-body');
-    body.innerHTML = '';
-    S.results.questions.forEach((q, i) => {
-      const isOk = S.results.answers[i] === q.correctAnswer;
-      const div = document.createElement('div');
-      div.style.cssText = 'padding:.7rem 0;border-bottom:1px solid var(--border)';
-      div.innerHTML = `
-        <div style="display:flex;gap:.45rem;align-items:flex-start;margin-bottom:.3rem">
-          <span>${isOk ? '✅' : '❌'}</span>
-          <strong style="font-size:.87rem">${i+1}. ${q.text}</strong>
+    const body=document.getElementById('review-body'); body.innerHTML='';
+    S.results.questions.forEach((q,i)=>{
+      const ok=S.results.answers[i]===q.correctAnswer;
+      const d=document.createElement('div');
+      d.style.cssText='padding:.65rem 0;border-bottom:1px solid var(--border)';
+      d.innerHTML=`
+        <div style="display:flex;gap:.4rem;align-items:flex-start;margin-bottom:.25rem">
+          <span>${ok?'✅':'❌'}</span>
+          <strong style="font-size:.85rem">${i+1}. ${q.text}</strong>
         </div>
         <div style="font-size:.78rem;color:var(--muted);padding-left:1.3rem">
-          Tu respuesta: <span class="${isOk ? 'text-green' : 'text-red'}">${S.results.answers[i]||'—'}</span>
+          Tu respuesta: <span class="${ok?'text-green':'text-red'}">${S.results.answers[i]||'—'}</span>
           &nbsp;·&nbsp; Correcta: <span class="text-green">${q.correctAnswer}</span>
         </div>`;
-      body.appendChild(div);
+      body.appendChild(d);
     });
     document.getElementById('m-review').classList.remove('hidden');
   }
   function closeReview() { document.getElementById('m-review').classList.add('hidden'); }
 
-  /* ═══════════ PROFILE MODAL ═══════════ */
-  function openProfile() {
-    if (!S.student) return;
-    const initials = S.student.name.split(' ').slice(0,2).map(n=>n[0]).toUpperCase().join('');
-    document.getElementById('prof-avatar').textContent = initials;
-    document.getElementById('prof-name').textContent = S.student.name;
-    document.getElementById('prof-meta').textContent = `${S.student.course} · ${S.student.level}`;
-    document.getElementById('prof-count').textContent = S.history.length;
-    document.getElementById('m-profile').classList.remove('hidden');
-  }
-  function closeProfile() { document.getElementById('m-profile').classList.add('hidden'); }
-
   /* ═══════════ PDF ═══════════ */
-  function buildPDF(stu, results) {
-    const { jsPDF } = window.jspdf;
-    const pdf = new jsPDF({ orientation:'portrait', unit:'mm', format:'a4' });
-    const { correct, wrong, total, score, elapsed, questions, answers, date } = results;
-    const m = Math.floor(elapsed/60), s = elapsed%60;
+  function buildPDF(stu, res) {
+    const { jsPDF }=window.jspdf;
+    const pdf=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+    const {correct,wrong,total,score,elapsed,questions,answers,date}=res;
+    const m=Math.floor(elapsed/60), s=elapsed%60;
 
-    // Header
-    pdf.setFillColor(11,21,36);
-    pdf.rect(0,0,210,44,'F');
-    pdf.setTextColor(255,255,255);
-    pdf.setFont('helvetica','bold'); pdf.setFontSize(20);
-    pdf.text('IntellectaQuiz', 14,18);
+    pdf.setFillColor(11,21,36); pdf.rect(0,0,210,44,'F');
+    pdf.setTextColor(255,255,255); pdf.setFont('helvetica','bold'); pdf.setFontSize(20);
+    pdf.text('IntellectaQuiz',14,18);
     pdf.setFontSize(9); pdf.setFont('helvetica','normal');
-    pdf.text('Reporte de Evaluación · '+date, 14,27);
+    pdf.text('Reporte de Evaluación · '+(date||''),14,27);
 
-    // Score badge
-    const sc = score >= 70 ? [30,217,160] : score >= 50 ? [249,200,70] : [244,112,107];
-    pdf.setFillColor(...sc);
-    pdf.roundedRect(152,7,44,28,4,4,'F');
+    const sc=score>=70?[30,217,160]:score>=50?[249,200,70]:[244,112,107];
+    pdf.setFillColor(...sc); pdf.roundedRect(152,7,44,28,4,4,'F');
     pdf.setTextColor(11,21,36); pdf.setFont('helvetica','bold'); pdf.setFontSize(26);
-    pdf.text(score+'%', 174,26, {align:'center'});
+    pdf.text(score+'%',174,26,{align:'center'});
 
-    // Student info
-    pdf.setTextColor(40,40,40);
-    pdf.setFontSize(13); pdf.setFont('helvetica','bold');
-    pdf.text('Datos del Estudiante', 14,58);
-    pdf.setDrawColor(124,92,232); pdf.line(14,61,196,61);
-    pdf.setFontSize(10);
-    [['Nombre:', stu.name], ['Curso:', stu.course], ['Nivel:', stu.level],
-     ['Tiempo:', `${m}m ${s}s`]].forEach(([k,v], i) => {
-      pdf.setFont('helvetica','bold'); pdf.text(k, 14, 70+i*8);
-      pdf.setFont('helvetica','normal'); pdf.text(v, 50, 70+i*8);
-    });
-
-    // Stats
-    pdf.setFontSize(13); pdf.setFont('helvetica','bold');
-    pdf.text('Resultados', 14,116);
-    pdf.line(14,119,196,119);
-    [
-      {l:'Correctas', v:correct, c:[30,217,160]},
-      {l:'Incorrectas', v:wrong, c:[244,112,107]},
-      {l:'Total', v:total, c:[124,92,232]},
-      {l:'Puntaje', v:score+'%', c:sc},
-    ].forEach((it,i) => {
-      const x = 14 + i*47;
-      pdf.setFillColor(...it.c); pdf.roundedRect(x,122,44,22,3,3,'F');
-      pdf.setTextColor(255,255,255); pdf.setFont('helvetica','bold'); pdf.setFontSize(16);
-      pdf.text(String(it.v), x+22,134, {align:'center'});
-      pdf.setFontSize(7); pdf.setFont('helvetica','normal');
-      pdf.text(it.l, x+22,140, {align:'center'});
-    });
-
-    // Answers
     pdf.setTextColor(40,40,40); pdf.setFontSize(13); pdf.setFont('helvetica','bold');
-    pdf.text('Detalle de Respuestas', 14,158);
-    pdf.line(14,161,196,161);
+    pdf.text('Datos del Estudiante',14,58);
+    pdf.setDrawColor(124,92,232); pdf.line(14,61,196,61); pdf.setFontSize(10);
+    [['Nombre:',stu.name],['Curso:',stu.course],['Tiempo:',`${m}m ${s}s`]]
+      .forEach(([k,v],i)=>{ pdf.setFont('helvetica','bold'); pdf.text(k,14,70+i*8); pdf.setFont('helvetica','normal'); pdf.text(v,50,70+i*8); });
 
-    let y = 169;
-    if (questions) {
-      questions.forEach((q, i) => {
-        if (y > 268) { pdf.addPage(); y = 20; }
-        const ok = answers[i] === q.correctAnswer;
-        pdf.setFillColor(ok ? 30:244, ok?217:112, ok?160:107);
-        pdf.circle(17, y-1.5, 2.5, 'F');
+    pdf.setFontSize(13); pdf.setFont('helvetica','bold');
+    pdf.text('Resultados',14,100); pdf.line(14,103,196,103);
+    [{l:'Correctas',v:correct,c:[30,217,160]},{l:'Incorrectas',v:wrong,c:[244,112,107]},
+     {l:'Total',v:total,c:[124,92,232]},{l:'Puntaje',v:score+'%',c:sc}]
+      .forEach((it,i)=>{ const x=14+i*47; pdf.setFillColor(...it.c); pdf.roundedRect(x,106,44,22,3,3,'F'); pdf.setTextColor(255,255,255); pdf.setFont('helvetica','bold'); pdf.setFontSize(16); pdf.text(String(it.v),x+22,118,{align:'center'}); pdf.setFontSize(7); pdf.setFont('helvetica','normal'); pdf.text(it.l,x+22,124,{align:'center'}); });
+
+    if (questions?.length) {
+      pdf.setTextColor(40,40,40); pdf.setFontSize(13); pdf.setFont('helvetica','bold');
+      pdf.text('Detalle de Respuestas',14,142); pdf.line(14,145,196,145);
+      let y=153;
+      questions.forEach((q,i)=>{
+        if(y>268){pdf.addPage();y=20}
+        const ok=answers[i]===q.correctAnswer;
+        pdf.setFillColor(ok?30:244,ok?217:112,ok?160:107); pdf.circle(17,y-1.5,2.5,'F');
         pdf.setTextColor(40,40,40); pdf.setFontSize(8.5); pdf.setFont('helvetica','bold');
-        const lines = pdf.splitTextToSize(`${i+1}. ${q.text}`, 168);
-        pdf.text(lines, 23, y);
-        y += lines.length * 4.5;
+        const lines=pdf.splitTextToSize(`${i+1}. ${q.text}`,168);
+        pdf.text(lines,23,y); y+=lines.length*4.5;
         pdf.setFont('helvetica','normal'); pdf.setFontSize(7.5); pdf.setTextColor(100,100,100);
-        pdf.text(`Tu respuesta: ${answers[i]||'—'}   Correcta: ${q.correctAnswer}`, 23, y);
-        y += 7;
+        pdf.text(`Tu respuesta: ${answers[i]||'—'}   Correcta: ${q.correctAnswer}`,23,y); y+=7;
       });
     }
 
-    const pages = pdf.internal.getNumberOfPages();
-    for (let p=1; p<=pages; p++) {
-      pdf.setPage(p); pdf.setFontSize(7); pdf.setTextColor(160,160,160);
-      pdf.text('Kabert Studio — LMKE · IntellectaQuiz', 14, 290);
-      pdf.text(`${p}/${pages}`, 196, 290, {align:'right'});
-    }
+    const pages=pdf.internal.getNumberOfPages();
+    for(let p=1;p<=pages;p++){ pdf.setPage(p); pdf.setFontSize(7); pdf.setTextColor(160,160,160); pdf.text('Kabert Studio — LMKE · IntellectaQuiz',14,290); pdf.text(`${p}/${pages}`,196,290,{align:'right'}); }
     return pdf;
   }
 
   function downloadPDF() {
-    if (!S.results || !S.student) { toast('No hay resultados', 'warn'); return; }
-    const pdf = buildPDF(S.student, { ...S.results, date: new Date().toLocaleDateString('es-BO') });
-    pdf.save(`IntellectaQuiz_${S.student.name.replace(/\s/g,'_')}.pdf`);
-    toast('PDF generado ✓', 'success');
+    if (!S.results||!S.student) { toast('No hay resultados disponibles','warn'); return; }
+    const btn=document.getElementById('res-pdf-btn');
+    btn.disabled=true; btn.textContent='Generando…';
+    try {
+      buildPDF(S.student,{...S.results,date:new Date().toLocaleDateString('es-BO')})
+        .save(`IntellectaQuiz_${S.student.name.replace(/\s/g,'_')}.pdf`);
+      toast('PDF descargado ✓','success');
+    } catch { toast('Error al generar PDF','error'); }
+    finally { btn.disabled=false; btn.textContent='📄 Descargar PDF'; }
   }
 
   function downloadHistPDF(h) {
-    const stu = { name: h.name, course: h.course, level: h.level };
-    const res = { correct: h.correct, wrong: h.wrong, total: h.total, score: h.score,
-      elapsed: h.elapsed, questions: h.questions, answers: h.answers, date: h.date };
-    const pdf = buildPDF(stu, res);
-    pdf.save(`IntellectaQuiz_${h.name.replace(/\s/g,'_')}_${h.date}.pdf`);
-    toast('PDF generado ✓', 'success');
+    const btn=document.getElementById('hd-pdf-btn');
+    btn.disabled=true; btn.textContent='Generando…';
+    try {
+      buildPDF({name:h.name,course:h.course},{correct:h.correct,wrong:h.wrong,total:h.total,score:h.score,elapsed:h.elapsed,questions:h.questions,answers:h.answers,date:h.date})
+        .save(`IntellectaQuiz_${h.name.replace(/\s/g,'_')}.pdf`);
+      toast('PDF descargado ✓','success');
+    } catch { toast('Error al generar PDF','error'); }
+    finally { btn.disabled=false; btn.textContent='📄 Descargar PDF'; }
   }
 
   /* ═══════════ FIREBASE READY ═══════════ */
-  window.addEventListener('iq-ready', () => {
-    S.fb = window.IQ;
-    boot();
-  });
-  // Fallback if Firebase takes too long
-  setTimeout(() => { if (!S.fb) boot(); }, 3500);
+  window.addEventListener('iq-ready', () => { S.fb=window.IQ; boot(); });
+  setTimeout(() => { if(!S.fb) boot(); }, 3500);
 
-  /* ── public ── */
   return {
-    continueSession, clearSession, confirmClearSession,
-    register, navTo,
-    nextQ, prevQ, finishQuiz,
+    authTab, goAuth, continueSession,
+    login, register, logout,
+    navTo, nextQ, prevQ, finishQuiz,
     openReview, closeReview,
-    openProfile, closeProfile,
     openHistDetail, closeHistDetail,
     downloadPDF,
   };
